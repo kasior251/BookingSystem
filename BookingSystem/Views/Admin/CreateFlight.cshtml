@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Create Flight";
+    var id = Session["RouteId"];
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Scripts/jquery-ui.min.css" rel="stylesheet" />
+    <title>Booking airline tickets</title>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script> 
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#username").val("");
+            $("#datepicker").datepicker();
+
+            $("#create").click(function () {
+                var departureDate = (new Date($("#datepicker").val())).getTime();
+
+                var hours = $("#hours").val() * 60 * 60 * 1000;
+                var minutes = $("#minutes").val() * 60 * 1000;
+                var departureTime = hours + minutes;
+                var departure = departureDate + departureTime + 2 * 60 * 1000;
+                var arrival = ($("#length").val()) * 60 * 1000 + departure;
+                var seats = $("#seats").val();
+                var price = $("#price").val();
+                $.ajax({
+                    url: '/Admin/CreateNewFlight',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { departure: departure, arrival: arrival, seats: seats, price: price },
+                    success: function (status) {
+                        if (status == "OK") {
+                            window.location = '/Admin/SeeFlights?routeId=' + @(id);
+                        }
+                        else {
+                            alert("Could not add the flight. Please try again later");
+                        }
+
+                    },
+                    error: function () {
+                        alert("An error has occured. Please try again later");
+                    }
+                });
+            });
+
+            function validateSeats() {
+                var seatsRegex = "^[1-9][0-9]{0,2}$";
+                var OK = true;
+                if (!($("#seats").val()).match(seatsRegex)) {
+                    OK = false;
+                }
+                return OK;
+            }
+
+            function validatePrice() {
+                var seatsRegex = "^[1-9][0-9]{0,3}$";
+                var OK = true;
+                if (!($("#price").val()).match(seatsRegex)) {
+                    OK = false;
+                }
+                return OK;
+            }
+
+        });
+    </script>
+</head>
+<body>
+
+    <h2>CreateFlight</h2>
+    <table>
+        <tr><th>Departure date:</th><td><input type="text" id="datepicker" class="btn btn-default btn-lg" /></td></tr>
+        <tr><th>Departure time:</th><td><select id="hours" class="btn btn-default dropdown-toggle">
+                                            <option value="0">00</option>
+                                            <option value="1">01</option>
+                                            <option value="2">02</option>
+                                            <option value="3">03</option>
+                                            <option value="4">04</option>
+                                            <option value="5">05</option>
+                                            <option value="6">06</option>
+                                            <option value="7">07</option>
+                                            <option value="8">08</option>
+                                            <option value="9">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                            <option value="21">21</option>
+                                            <option value="22">22</option>
+                                            <option value="23">23</option>
+            </select> :
+             <select id="minutes" class="btn btn-default dropdown-toggle">
+                 <option value="0">00</option>
+                 <option value="30">30</option>
+             </select>
+            </td></tr>
+        <tr>
+            <th>Length: </th>
+            <td>
+                <select id="length" class="btn btn-default btn-lg dropdown-toggle">
+                    <option value="60">1:00 h</option>
+                    <option value="90">1:30 h</option>
+                    <option value="120">2:00 h</option>
+                    <option value="150">2:30 h</option>
+                    <option value="180">3:00 h</option>
+                    <option value="210">3:30 h</option>
+                    <option value="240">4:00 h</option>
+                </select>
+            </td>
+        </tr>
+        <tr><th>Seats: </th><td><input type="text" id="seats" /></td></tr>
+        <tr><th>Price </th><td><input type="text" id="price" /></td></tr>
+    </table>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button id="create" class="btn btn-default">Create</button>
+        </div>
+    </div>   
+   
+
+
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+    </body>
+</html>

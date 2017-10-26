@@ -1,0 +1,96 @@
+﻿body {
+    background: url(../background.jpg) no-repeat center fixed;
+    background-size: cover;
+    color: ghostwhite;
+}
+
+h3,h4 {
+    margin-top: 50px;
+}
+
+h2 {
+    margin-top: 80px;
+}
+
+.error {
+    color: yellow;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dropDown {
+    padding-top: 40px;
+}
+
+#drop1, #drop2 {
+    width: 150px;
+    margin: 20px;
+}
+
+#drop3 {
+    margin: 20px;
+    margin-left: 35px;
+}
+
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+button {
+    margin: 5px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.price {
+    color: black;
+}
+
+#amount {
+    font-size: 16px;
+    margin: 10px;
+}
+
+#searchButton {
+    margin-left: 20px;
+}
+
+.textBox {
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.cardNo {
+    margin: 2px;
+    border-radius: 5px;
+    width: 40px;
+}
+
+.dateBox {
+    margin: 2px;
+    border-radius: 5px;
+}
+
+#cvc {
+    width: 30px;
+    margin: 2px;
+    border-radius: 5px;
+}
+.label {
+    font-size: 14px;
+    margin-left: 25px;
+}
+
+

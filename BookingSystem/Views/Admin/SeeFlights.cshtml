@@ -1,0 +1,112 @@
+﻿@model List<BookingSystem.Model.Schedule>
+
+@{
+    ViewBag.Title = "SeeFligts";
+    int routeId = (int)Session["RouteId"];
+    var counter = 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Scripts/jquery-ui.min.css" rel="stylesheet" />
+    <title>Booking airline tickets</title>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                url: '/Admin/FindRoute',
+                type: 'POST',
+                dataType: 'json',
+                data: { id: @(routeId) },
+                success: function (cities) {
+                    $("#route").empty().append(cities[0] + " - " + cities[1]);
+                }, error: function () {
+                    alert("A problem has occured. Please try again later");
+                }
+            });
+
+            $.ajax({
+                url: '/Admin/GetDates',
+                type: 'POST',
+                dataType: 'json',
+                data: { id: @(routeId) },
+                success: function (dates) {
+                    var count = 0;
+                    for (var i = 0; i < dates.length; i = i + 2) {
+                        $("#dep" + count).empty().append(getDate(dates[i]));
+                        alert(dates[i]);
+                        $("#arr" + count).empty().append(getDate(dates[i + 1]));
+                        alert(dates[i + 1]);
+                        count++;
+                    }
+                },
+                error: function () {
+                    alert("A problem has occured fetching flight dates. Please try again later");
+                }
+            });
+
+            //convertere milisekunder til lesbar dato-string
+            function getDate(milis) {
+                var date = new Date(milis);
+                var string = date.toUTCString();
+                alert("Milis " + milis + " date " + string);
+                return string;
+            }
+
+        });
+    </script>
+</head>
+<body>
+    <h2>See Fligts</h2>
+    <h3 id="route"></h3>
+
+    <p>
+        @Html.ActionLink("Add a new flight", "CreateFlight")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].departureDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].arrivalDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].seatsLeft)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].price)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td id="dep@(counter)">
+                    
+                </td>
+                <td id="arr@(counter)">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.seatsLeft)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.price)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                </td>
+            </tr>
+            counter++;
+        }
+
+    </table>
+    </body>
+</html>

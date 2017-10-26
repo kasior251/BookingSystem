@@ -1,0 +1,38 @@
+﻿@model List<BookingSystem.Model.Route>
+
+@{
+    ViewBag.Title = "SeeFlights";
+}
+
+<h2>SeeFlights</h2>
+
+<p>
+    @Html.ActionLink("Add new Route", "AddRoute")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model[0].origin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].destination)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.origin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.destination)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "DeleteRoute",  new { routeId=item.id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("See flights", "SeeFlights", new { routeId = item.id }, new { @class = "btn btn-default" })
+        </td>
+    </tr>
+}
+
+</table>

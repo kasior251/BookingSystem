@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "BookFlight";
+    var nr = (int)Session["Passengers"];
+    var price = (int)Session["Price"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Scripts/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+    <title>Booking airline tickets</title>
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#next").click(function () {
+                //regex-check input feltene
+                if (!checkInput()) {
+                    return;
+                }
+
+                //disable input feltene for fornavn og etternavn
+                for (i = 1; i <= @(nr); i++) {
+                    $("#fname"+i).prop('disabled', true);
+                    $("#lname"+i).prop('disabled', true);
+                }
+
+                //vis div'en med payment options 
+                $("#payment").css("visibility", "visible"); 
+            
+            });
+
+            //vis sluttprisen og knappen for å gå videre
+            $("#paymentOpts").click(function () {
+                $("#pay").css("visibility", "visible");
+                @{ int totalAmount = price * nr; }
+                $("#amount").empty().append("Total : " + @(totalAmount));
+            });
+
+            //vis info avhengig av valgt betalingsform, vis bekfert knappen
+            $("#pay").click(function () {
+                $("#confirmButton").css('visibility', 'hidden');
+                var method = $("#paymentOpts").val();
+                if (method == "card") {
+                    $("#confirm").empty().append("<table><tr><th>Card number</th>" +
+                        "<td><input type='text' class='cardNo' maxlength = '4' id='card1' /><input type='text' class='cardNo' maxlength = '4' id='card2' /><input type='text' class='cardNo' maxlength = '4' id='card3' /><input type='text' class='cardNo' maxlength = '4' id='card4' /></td><td><div id='cardError' class='error'></div></td></tr>" +
+                        "<tr><th>expiration date</th><td><select class='dateBox'><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select><select class='dateBox'><option>2017</option><option>2018</option><option>2019</option><option>2020</option></td></tr>" +
+                        "<tr><th>CVC</th><td><input type='text' maxlength = '3' id='cvc' /></td><td><div id='cvcError' class='error' ></div></td></tr></table>");
+                } else {
+                    $("#confirm").empty().append("</br></br>This form of payment is only available for registered customers. Please choose another form of payment");
+                    return;
+                }
+                $("#confirmButton").css('visibility', 'visible');
+            });
+
+            //regex-check input feltene for kortinfo, send med ajax alle info til kontrolleren
+            $("#confirmPayment").click(function () {
+                if (!checkCardInfo()) {
+                    return;
+                }
+                var fnames = [];
+                var lnames = []
+                for (i = 1; i <= @(nr); i++) {
+                    fnames.push($("#fname" + i).val());
+                    lnames.push($("#lname" + i).val());
+                }
+                $.ajax({
+                    url: '/Home/Summary',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { firstNames: fnames, lastNames: lnames },
+                    //dersom alt gikk bra - redirect til siden med bekreftelse
+                    success: function () {
+                        window.location = '/Home/ShowConfirmation';
+                    },
+                    //vis error siden dersom controlleren returnerte feil
+                    error: function () {
+                        window.location = '/Home/Error';
+                    }
+                });
+
+            });
+
+            //regex-check for fornavn og etternavn 
+            function checkInput() {
+                var nameRegex = "^[a-zA-Z-_. ]{2,20}$";
+                var OK = true;
+                for (i = 1; i <= @(nr); i++) {
+                    $("#fn" + i).empty();
+                    $("#ln" + i).empty();
+                    if (!($("#fname" + i).val()).match(nameRegex)) {
+                        OK = false;
+                        $("#fn" + i).append(" Wrong format");
+                    } 
+                    if (!($("#lname" + i).val()).match(nameRegex)) {
+                        OK = false;
+                        $("#ln" + i).append(" Wrong format");
+                    } 
+                }
+                return OK;
+            }
+
+            //regex check for kortdetaljer feltene
+            function checkCardInfo() {
+                var cardRegex = "[0-9]{4}$";
+                var cvcRegex = "[0-9]{3}$";
+                OK = true;
+                $("#cardError").empty();
+                $("#cvcError").empty();
+                for (i = 1; i < 5; i++) {
+                    if (!($("#card" + i).val()).match(cardRegex)) {
+                        OK = false;
+                        $("#cardError").append("Wrong format");
+                        break;
+                    } 
+                }
+                if (!($("#cvc").val()).match(cvcRegex)) {
+                    OK = false;
+                    $("#cvcError").append("Must be 3 digits");
+                }
+                return OK;
+            }
+
+            //avbryt hele bookingen
+            $("#cancel").click(function () {
+                window.location = '/Home/Index/'
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div id="passengers">
+        @for (int i = 0; i < nr; i++)
+        {
+            <h4>Passenger @(i + 1)</h4>
+            <table>
+                <tr><th>First name: </th><td><input type="text" class="textBox" id="fname@(i + 1)" /></td><td><div id="fn@(i+1)" class="error"></div></td></tr>
+                <tr><th>Last name: </th><td><input type="text" class="textBox" id="lname@(i + 1)" /></td><td><div id="ln@(i+1)" class="error"></div></td></tr>
+            </table>
+        }
+        <button id="next" class="btn btn-lg btn-primary">Next</button>
+    </div>
+    </br> 
+    <div id="payment" style="visibility: hidden">
+        <table>
+            <tr><th>Payment method</th><td><select id="paymentOpts" class="dateBox"> 
+                 <option value="card">Mastercard/Visa</option>
+                 <option value="points">Points</option></select></td></tr>
+            <tr><th id="cardNo" style="visibility: hidden"></th></tr>
+        </table>
+        <div id="amount"></div></br>
+        <button id="pay" class="btn btn-lg btn-primary" style="visibility: hidden">Next</button>
+    </div>
+    <div id="confirm"></div></br>
+    <div id="confirmButton" style="visibility: hidden">
+        <button id="confirmPayment" class="btn btn-lg btn-primary">Confrim your booking</button>
+        <button id="cancel" class="btn btn-lg btn-danger">Cancel</button>
+    </div>
+</body>
+</html>

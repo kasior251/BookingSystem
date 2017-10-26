@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="BookingSystem2017xxx" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Kasia\\source\\repos\\BookingSystem\\BookingSystem\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\Kasia\\source\\repos\\BookingSystem\\BookingSystem\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="Add write permission to App_Data Folder" description="Add write permission to App_Data folder" value="BookingSystem2017xxx/App_Data" tags="Hidden">
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\Kasia\\source\\repos\\BookingSystem\\BookingSystem\\obj\\Release\\Package\\PackageTmp\\App_Data$" />
+  </parameter>
+  <parameter name="BookingSystem.Models.DB-Web.config Connection String" description="" value="BookingSystem.Models.DB_ConnectionString" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Kasia\\source\\repos\\BookingSystem\\BookingSystem\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='BookingSystem.Models.DB']/@connectionString" />
+  </parameter>
+  <parameter name="DB-Web.config Connection String" description="" value="Data Source=bookingsystemserver.database.windows.net;Initial Catalog=BookingSystem;Persist Security Info=True;User ID=snoopy;Password=sMash2017!" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Kasia\\source\\repos\\BookingSystem\\BookingSystem\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DB']/@connectionString" />
+  </parameter>
+</parameters>

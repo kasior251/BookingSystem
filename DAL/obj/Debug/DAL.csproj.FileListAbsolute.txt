@@ -1,0 +1,13 @@
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\DAL.dll.config
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\DAL.dll
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\DAL.pdb
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\EntityFramework.dll
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\EntityFramework.xml
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Kasia\source\repos\BookingSystem\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+C:\Users\Kasia\source\repos\BookingSystem\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+C:\Users\Kasia\source\repos\BookingSystem\DAL\obj\Debug\DAL.dll
+C:\Users\Kasia\source\repos\BookingSystem\DAL\obj\Debug\DAL.pdb
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\Model.dll
+C:\Users\Kasia\source\repos\BookingSystem\DAL\bin\Debug\Model.pdb

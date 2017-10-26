@@ -1,0 +1,49 @@
+﻿@model BookingSystem.Model.Admin
+
+@{
+    ViewBag.Title = "AdminMenu";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Scripts/jquery-ui.min.css" rel="stylesheet" />
+    <title>Booking airline tickets</title>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+        });
+    </script>
+</head>
+<body>
+    <h2>AdminMenu</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Admin</h4>
+            <hr />
+
+            <div class="form-group">
+
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to Main", "Index", "Home", new { area = "" }, new { @class = "btn btn-default" })</br>
+        @Html.ActionLink("Add new admin", "RegisterAdmin", "Admin", new { @class = "btn btn-default" })</br>
+        @Html.ActionLink("See flights", "SeeRoutes", "Admin", new { @class = "btn btn-default" })</br>
+        @Html.ActionLink("log out", "LogOut", "Admin", new { @class = "btn btn-default" })</br>
+    </div>
+
+</body>
+</html>
+
+
