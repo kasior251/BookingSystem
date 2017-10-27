@@ -8,30 +8,38 @@ using System.Threading.Tasks;
 
 namespace BookingSystem.BLL
 {
-    public class RouteLogic
+    public class RouteLogic: IRouteLogic
     {
+        private IDatabaseDAL _repository;
+
+        public RouteLogic()
+        {
+            _repository = new DatabaseDAL();
+        }
+
+        public RouteLogic(IDatabaseDAL stub)
+        {
+            _repository = stub;
+        }
+
         public List<Route> findAllRoutes()
         {
-            var RouteDAL = new DatabaseDAL();
-            return RouteDAL.findAllRoutes();
+            return _repository.findAllRoutes();
         }
 
         public bool addNew(Route route)
         {
-            var RouteDAL = new DatabaseDAL();
-            return RouteDAL.addNew(route);
+            return _repository.addNew(route);
         }
 
         public bool deleteRoute(int routeId)
         {
-            var RouteDAL = new DatabaseDAL();
-            return RouteDAL.deleteRoute(routeId);
+            return _repository.deleteRoute(routeId);
         }
 
         public Route getRoute(int id)
         {
-            var RouteDAL = new DatabaseDAL();
-            return RouteDAL.getRoute(id);
+            return _repository.getRoute(id);
         }
 
     }

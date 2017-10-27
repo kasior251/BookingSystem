@@ -6,26 +6,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL
+namespace BookingSystem.BLL
 {
-    public class ScheduleLogic
+    public class ScheduleLogic : IScheduleLogic
     {
+        private IDatabaseDAL _repository;
+
+        public ScheduleLogic()
+        {
+            _repository = new DatabaseDAL();
+        }
+
+        public ScheduleLogic(IDatabaseDAL stub)
+        {
+            _repository = stub;
+        }
         public List<Schedule> getFlights(int routeId)
         {
-            var ScheduleDAL = new DatabaseDAL();
-            return ScheduleDAL.findFlights(routeId);
+            return _repository.findFlights(routeId);
         }
 
         public bool addNewFlight(long departure, long arrival, int seats, int price, int routeId)
         {
-            var ScheduleDAL = new DatabaseDAL();
-            return ScheduleDAL.addNewFlight(departure, arrival, seats, price, routeId);
+            return _repository.addNewFlight(departure, arrival, seats, price, routeId);
         }
 
         public bool deleteFlight(int id)
         {
-            var ScheduleDAL = new DatabaseDAL();
-            return ScheduleDAL.deleteFlight(id);
+            return _repository.deleteFlight(id);
         }
 
     }

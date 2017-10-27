@@ -1,7 +1,5 @@
-﻿using BLL;
-using BookingSystem.BLL;
+﻿using BookingSystem.BLL;
 using BookingSystem.Model;
-using BookingSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +12,32 @@ namespace BookingSystem.Controllers
 {
     public class AdminController : Controller
     {
-       
+        private IAdminLogic _adminBLL;
+        private IRouteLogic _routeBLL;
+        private IScheduleLogic _scheduleBLL;
+
+        public AdminController()
+        {
+            _adminBLL = new AdminLogic();
+            _routeBLL = new RouteLogic();
+            _scheduleBLL = new ScheduleLogic();
+        }
+
+        public AdminController(IAdminLogic stub)
+        {
+            _adminBLL = stub;
+        }
+
+        public AdminController(IRouteLogic stub)
+        {
+            _routeBLL = stub;
+        }
+
+        public AdminController(IScheduleLogic stub)
+        {
+            _scheduleBLL = stub;
+        }
+
         public ActionResult Index()
         {
             ViewBag.LoginFail = false;
@@ -40,9 +63,7 @@ namespace BookingSystem.Controllers
         [HttpPost]
         public ActionResult Index(Admin admin)
         {
-            var AdminDB = new AdminLogic();
-
-            if(AdminLogic.adminExists(admin))
+            if(_adminBLL.adminExists(admin))
             {
                 Session["Authorized"] = true;
                 ViewBag.LoginFail = false;
@@ -80,8 +101,7 @@ namespace BookingSystem.Controllers
                 return View();
             }
 
-            var adminLogic = new AdminLogic();
-            if (adminLogic.addAdmin(admin))
+            if (_adminBLL.addAdmin(admin))
             {
                 return RedirectToAction("AdminMenu");
             }
@@ -110,8 +130,7 @@ namespace BookingSystem.Controllers
             {
                 Session["ErrorDeleting"] = false;
                 ViewBag.ErrorDeletingRoute = Session["ErrorDeletingRoute"];
-                var routeLogic = new RouteLogic();
-                return View(routeLogic.findAllRoutes());
+                return View(_routeBLL.findAllRoutes());
             } else
             {
                 return RedirectToAction("Index");
@@ -141,8 +160,7 @@ namespace BookingSystem.Controllers
             }
             else
             {
-                var routeLogic = new RouteLogic();
-                routeLogic.addNew(route);
+                _routeBLL.addNew(route);
                 return RedirectToAction("SeeRoutes");
             }
         }
@@ -155,8 +173,7 @@ namespace BookingSystem.Controllers
                 return RedirectToAction("Index");
             } else
             {
-                var routeLogic = new RouteLogic();
-                if (routeLogic.deleteRoute(routeId))
+                if (_routeBLL.deleteRoute(routeId))
                 {
                     Session["ErrorDeletingRoute"] = false;
                     return RedirectToAction("SeeRoutes");
@@ -188,8 +205,7 @@ namespace BookingSystem.Controllers
                 {
                     ViewBag.ErrorDeleting = Session["ErrorDeleting"];
                 }
-                var scheduleLogic = new ScheduleLogic();
-                List<Schedule> flights = scheduleLogic.getFlights(routeId);
+                List<Schedule> flights = _scheduleBLL.getFlights(routeId);
                 return View(flights);
             }
         }
@@ -208,9 +224,8 @@ namespace BookingSystem.Controllers
         }
         public string CreateNewFlight(long departure, long arrival, int seats, int price)
         {
-            var scheduleLogic = new ScheduleLogic();
             var status = "";
-            if (scheduleLogic.addNewFlight(departure, arrival, seats, price, (int)Session["RouteId"]))
+            if (_scheduleBLL.addNewFlight(departure, arrival, seats, price, (int)Session["RouteId"]))
             {
                 status = "OK";
             } else
@@ -227,9 +242,8 @@ namespace BookingSystem.Controllers
 
         public string FindRoute(int id)
         {
-            var routeLogic = new RouteLogic();
             List<string> cities = new List<string>();
-            Route route = routeLogic.getRoute(id);
+            Route route = _routeBLL.getRoute(id);
             cities.Add(route.origin);
             cities.Add(route.destination);
             var jsonSerializer = new JavaScriptSerializer();
@@ -239,9 +253,8 @@ namespace BookingSystem.Controllers
 
         public string GetDates(int id)
         {
-            var scheduleLogic = new ScheduleLogic();
             List<long> dates = new List<long>();
-            List<Schedule> flights = scheduleLogic.getFlights(id);
+            List<Schedule> flights = _scheduleBLL.getFlights(id);
             foreach (Schedule s in flights)
             {
                 dates.Add(s.departureDate);
@@ -260,8 +273,7 @@ namespace BookingSystem.Controllers
             }
             else
             {
-                var scheduleLogic = new ScheduleLogic();
-                if (scheduleLogic.deleteFlight(id)) {
+                if (_scheduleBLL.deleteFlight(id)) {
                     Session["ErrorDeleting"] = false;
                     return RedirectToAction("SeeFlights", new { routeId = (int)Session["RouteId"] });
                 } 

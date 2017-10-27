@@ -3,39 +3,55 @@
 @{
     ViewBag.Title = "SeeFlights";
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Scripts/jquery-ui.min.css" rel="stylesheet" />
+    <title>Booking airline tickets</title>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js" type="text/javascript"></script>
+</head>
+<body>
 
-<h2>SeeFlights</h2>
-@if (ViewBag.ErrorDeletingRoute)
+    <h2>SeeFlights</h2>
+    @if (ViewBag.ErrorDeletingRoute)
             {
-    <p style="color:red">There are flights planned on this Route! Cannot delete! </p>
-}
+        <p style="color:red">There are flights planned on this Route! Cannot delete! </p>
+    }
 
-<p>
-    @Html.ActionLink("Add new Route", "AddRoute", new { @id = "addRoute" }, new { @class = "btn btn-default" })
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model[0].origin)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].destination)
-        </th>
-        <th></th>
-    </tr>
+    <p>
+        @Html.ActionLink("Add new Route", "AddRoute", new { @id = "addRoute" }, new { @class = "btn btn-default" })
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].origin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].destination)
+            </th>
+            <th></th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.origin)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.destination)
-        </td>
-        <td>
-            @Html.ActionLink("Delete", "DeleteRoute",  new { routeId=item.id }, new { @class = "btn btn-default" })
-            @Html.ActionLink("See flights", "SeeFlights", new { routeId = item.id }, new { @class = "btn btn-default" })
-        </td>
-    </tr>
-}
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.origin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.destination)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "DeleteRoute", new { routeId = item.id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("See flights", "SeeFlights", new { routeId = item.id }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+    </body>
+</html>

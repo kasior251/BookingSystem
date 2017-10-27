@@ -8,17 +8,34 @@ using System.Threading.Tasks;
 
 namespace BookingSystem.BLL
 {
-    public class AdminLogic
+    public class AdminLogic : IAdminLogic
     {
-        public bool addAdmin(Admin admin)
+        private IDatabaseDAL _repository;
+
+        public IDatabaseDAL getRepository()
         {
-            var AdminDAL = new DatabaseDAL();
-            return AdminDAL.addAdmin(admin);
+            return _repository;
         }
 
-        public static bool adminExists(Admin admin)
+        public AdminLogic()
         {
-            return DatabaseDAL.adminExists(admin);
+            _repository = new DatabaseDAL();
+        }
+
+        public AdminLogic(IDatabaseDAL stub)
+        {
+            _repository = stub;
+        }
+
+        public bool addAdmin(Admin admin)
+        {
+
+            return _repository.addAdmin(admin);
+        }
+
+        public bool adminExists(Admin admin)
+        {
+            return _repository.adminExists(admin);
         }
 
 

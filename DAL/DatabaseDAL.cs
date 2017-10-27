@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace BookingSystem.DAL
 {
     //hit skal metoder for å "betjene" databasen
-    public class DatabaseDAL
+    public class DatabaseDAL : IDatabaseDAL
     {
-        private static DatabaseContext db = new DatabaseContext();
+        private DatabaseContext db = new DatabaseContext();
 
         public bool addAdmin(Admin admin)
         {
@@ -31,7 +31,7 @@ namespace BookingSystem.DAL
 
         }
 
-        public static bool adminExists(Admin admin)
+        public bool adminExists(Admin admin)
         {
             byte[] passwordDB = makeHash(admin.password);
             Admins adminOK = db.Admins.FirstOrDefault(
@@ -46,7 +46,7 @@ namespace BookingSystem.DAL
             }
         }
    
-        private static byte[] makeHash(String password)
+        private byte[] makeHash(String password)
         {
             string salt = generateSalt(20);
             byte[] passwordInn;
@@ -56,7 +56,7 @@ namespace BookingSystem.DAL
 
         }
 
-        private static string generateSalt(int length)
+        private string generateSalt(int length)
         {
             string signs = "1234567890qwertyuiopasdfghjklzxcvbnm";
             string salt = "";
@@ -254,6 +254,5 @@ namespace BookingSystem.DAL
             }
             return true;
         }
-           
     }
 }

@@ -9,6 +9,7 @@ namespace BookingSystem.Model
 {
     public class Admin
     {
+        [Key]
         [Display(Name = "Username")]
         [Required(ErrorMessage = "Username can't be empty")]
         public string username { get; set; }
