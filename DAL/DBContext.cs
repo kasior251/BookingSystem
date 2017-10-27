@@ -39,7 +39,7 @@ namespace BookingSystem.DAL
     {
         public string id { get; set; }
         public List<Passengers> passengers { get; set; }
-        public List<Schedules> schedule { get; set; }
+        public Schedules schedule { get; set; }
     }
 
     public class Passengers

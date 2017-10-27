@@ -39,9 +39,7 @@
                     var count = 0;
                     for (var i = 0; i < dates.length; i = i + 2) {
                         $("#dep" + count).empty().append(getDate(dates[i]));
-                        alert(dates[i]);
                         $("#arr" + count).empty().append(getDate(dates[i + 1]));
-                        alert(dates[i + 1]);
                         count++;
                     }
                 },
@@ -54,7 +52,6 @@
             function getDate(milis) {
                 var date = new Date(milis);
                 var string = date.toUTCString();
-                alert("Milis " + milis + " date " + string);
                 return string;
             }
 
@@ -64,10 +61,14 @@
 <body>
     <h2>See Fligts</h2>
     <h3 id="route"></h3>
-
+    @if (ViewBag.ErrorDeleting)
+            {
+        <p style="color:red">There are tickets booked for this flight! Cannot delete! </p>
+    }
     <p>
-        @Html.ActionLink("Add a new flight", "CreateFlight")
+        @Html.ActionLink("Add a new flight", "CreateFlight", new { @id = "addFlight" }, new { @class = "btn btn-default" })
     </p>
+
     <table class="table">
         <tr>
             <th>
@@ -100,8 +101,7 @@
                     @Html.DisplayFor(modelItem => item.price)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    @Html.ActionLink("Delete", "DeleteFlight", new { id = item.id }, new { @class = "btn btn-default" })
                 </td>
             </tr>
             counter++;

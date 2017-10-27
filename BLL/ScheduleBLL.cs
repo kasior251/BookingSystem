@@ -22,5 +22,11 @@ namespace BLL
             return ScheduleDAL.addNewFlight(departure, arrival, seats, price, routeId);
         }
 
+        public bool deleteFlight(int id)
+        {
+            var ScheduleDAL = new DatabaseDAL();
+            return ScheduleDAL.deleteFlight(id);
+        }
+
     }
 }

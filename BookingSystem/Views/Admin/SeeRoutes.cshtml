@@ -5,9 +5,13 @@
 }
 
 <h2>SeeFlights</h2>
+@if (ViewBag.ErrorDeletingRoute)
+            {
+    <p style="color:red">There are flights planned on this Route! Cannot delete! </p>
+}
 
 <p>
-    @Html.ActionLink("Add new Route", "AddRoute")
+    @Html.ActionLink("Add new Route", "AddRoute", new { @id = "addRoute" }, new { @class = "btn btn-default" })
 </p>
 <table class="table">
     <tr>
@@ -34,5 +38,4 @@
         </td>
     </tr>
 }
-
 </table>

@@ -22,10 +22,20 @@
             $("#create").click(function () {
                 var departureDate = (new Date($("#datepicker").val())).getTime();
 
+                if (!validateSeats()) {
+                    $("#seatsError").empty().append("Wrong seats format");
+                    return;
+                }
+
+                if (!validatePrice()) {
+                    $("#priceError").empty().append("Wrong price format");
+                    return;
+                }
+
                 var hours = $("#hours").val() * 60 * 60 * 1000;
                 var minutes = $("#minutes").val() * 60 * 1000;
                 var departureTime = hours + minutes;
-                var departure = departureDate + departureTime + 2 * 60 * 1000;
+                var departure = departureDate + departureTime + 60 * 60 * 1000;
                 var arrival = ($("#length").val()) * 60 * 1000 + departure;
                 var seats = $("#seats").val();
                 var price = $("#price").val();
@@ -120,8 +130,8 @@
                 </select>
             </td>
         </tr>
-        <tr><th>Seats: </th><td><input type="text" id="seats" /></td></tr>
-        <tr><th>Price </th><td><input type="text" id="price" /></td></tr>
+        <tr><th>Seats: </th><td><input type="text" id="seats" maxlength="3" style="border-radius: 5px; width: 50px; padding: 5px;" /></td><td id="seatsError"></td></tr>
+        <tr><th>Price </th><td><input type="text" id="price" maxlength="4" style="border-radius: 5px; width: 50px; padding: 5px; "/></td><td id="priceError"></td></tr>
     </table>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

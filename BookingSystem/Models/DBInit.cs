@@ -8,7 +8,7 @@ using System.Web;
 namespace BookingSystem.Models
 {
     public class DBInit : DropCreateDatabaseAlways<DB>
-    {/*
+    {
         protected override void Seed(DB context)
         {
             var routes = new List<Route>()
@@ -121,6 +121,6 @@ namespace BookingSystem.Models
         {
             DateTime date = DateTime.ParseExact(s, "dd-MM-yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture);
             return (long)(date - new DateTime(1970, 1, 1)).TotalMilliseconds;
-        }*/
+        }
     }
 }

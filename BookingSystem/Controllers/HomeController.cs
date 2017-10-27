@@ -74,7 +74,7 @@ namespace BookingSystem.Controllers
             List<Schedule> allFlights = new List<Schedule>();
             foreach (int i in rId)
             {
-                allFlights = db.Schedules.Where(s => s.route.id == i && s.seatsLeft >= passengers && s.departureDate > date).ToList();
+                allFlights = db.Schedules.Where(s => s.route.id == i && s.seatsLeft >= passengers && s.departureDate > date).OrderBy(s=> s.departureDate).ToList();
             }
 
             var jsonSerializer = new JavaScriptSerializer();
@@ -126,17 +126,25 @@ namespace BookingSystem.Controllers
             var returnId = (int)Session["ScheduleR"];
 
             Ticket ticket = new Ticket();
-            List<Schedule> schedules = new List<Schedule>();
-            schedules.Add(db.Schedules.Find(flightId));
-            if (returnId != 0)
-            {
-                schedules.Add(db.Schedules.Find(returnId));
-            }
+            //List<Schedule> schedules = new List<Schedule>();
+            ticket.schedule = db.Schedules.Find(flightId);
+            //schedules.Add(db.Schedules.Find(flightId));
             Session["Ticket"] = ticket;
             db.Tickets.Add(ticket);
             ticket.passengers = passengers;
-            ticket.schedule = schedules;
             ticket.id = ConfirmNr();
+            if (returnId != 0)
+            {
+                Ticket t = new Ticket()
+                {
+                    id = ticket.id + "R",
+                    schedule = db.Schedules.Find(returnId),
+                    passengers = passengers
+                };
+                //schedules.Add(db.Schedules.Find(returnId));
+                db.Tickets.Add(t);
+            }
+            //ticket.schedule = schedule;
 
             var schedule = (from s in db.Schedules
                          where  s.id == flightId

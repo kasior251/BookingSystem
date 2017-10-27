@@ -127,7 +127,7 @@ namespace BookingSystem.DAL
         public bool deleteRoute(int routeId)
         {
             var route = db.Routes.FirstOrDefault(r => r.id == routeId);
-            if (route == null)
+            if (route == null || checkSchedules(routeId))
             {
                 return false;
             }
@@ -146,11 +146,22 @@ namespace BookingSystem.DAL
             }
         }
 
+        //sjekk om det finnes noen flyvninger på strekningen som skal slettes
+        private bool checkSchedules(int id)
+        {
+            Schedules schedule = db.Schedules.FirstOrDefault(s => s.route.id == id);
+            if (schedule == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public List<Schedule> findFlights(int routeId)
         {
             List<Schedules> flights = (from s in db.Schedules
                                      where s.route.id == routeId
-                                     select s).ToList();
+                                     select s).OrderBy(s => s.departureDate).ToList();
             List<Schedule> list = new List<Schedule>();
             foreach ( Schedules f in flights) {
                 Schedule s = new Schedule()
@@ -205,5 +216,44 @@ namespace BookingSystem.DAL
                 destination = route.destination
             };
         }
+
+        public bool deleteFlight(int id)
+        {
+            var flight = db.Schedules.FirstOrDefault(f => f.id == id);
+            if (flight == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (checkTickets(id))
+                {
+                    return false;
+                }
+                try
+                {
+                    db.Schedules.Remove(flight);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        //sjekk om det er noen billetter som er booket for denne avgangen som skal slettes
+        private bool checkTickets(int id)
+        {
+            Tickets ticket = db.Tickets.FirstOrDefault(t => t.schedule.id == id);
+            if (ticket == null)
+            {
+                return false;
+            }
+            return true;
+        }
+           
     }
 }

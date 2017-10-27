@@ -93,6 +93,7 @@ namespace BookingSystem.Controllers
             checkStatus();
             if ((bool)Session["Authorized"])
             {
+                Session["ErrorDeletingRoute"] = false;
                 return View();
             }
             else
@@ -105,10 +106,15 @@ namespace BookingSystem.Controllers
         public ActionResult SeeRoutes()
         {
             checkStatus();
-            
+            if ((bool)Session["Authorized"])
             {
+                Session["ErrorDeleting"] = false;
+                ViewBag.ErrorDeletingRoute = Session["ErrorDeletingRoute"];
                 var routeLogic = new RouteLogic();
                 return View(routeLogic.findAllRoutes());
+            } else
+            {
+                return RedirectToAction("Index");
             }
         }
 
@@ -150,8 +156,17 @@ namespace BookingSystem.Controllers
             } else
             {
                 var routeLogic = new RouteLogic();
-                routeLogic.deleteRoute(routeId);
-                return RedirectToAction("SeeRoutes");
+                if (routeLogic.deleteRoute(routeId))
+                {
+                    Session["ErrorDeletingRoute"] = false;
+                    return RedirectToAction("SeeRoutes");
+                }
+                else
+                {
+                    Session["ErrorDeletingRoute"] = true;
+                    return RedirectToAction("SeeRoutes");
+                }
+                
             }
         }
 
@@ -165,6 +180,14 @@ namespace BookingSystem.Controllers
             else
             {
                 Session["RouteId"] = routeId;
+                if (Session["ErrorDeleting"] == null)
+                {
+                    ViewBag.ErrorDeleting = false;
+                }
+                else
+                {
+                    ViewBag.ErrorDeleting = Session["ErrorDeleting"];
+                }
                 var scheduleLogic = new ScheduleLogic();
                 List<Schedule> flights = scheduleLogic.getFlights(routeId);
                 return View(flights);
@@ -228,6 +251,28 @@ namespace BookingSystem.Controllers
             return jsonSerializer.Serialize(dates);
         }
 
+        public ActionResult DeleteFlight(int id)
+        {
+            checkStatus();
+            if (!(bool)Session["Authorized"])
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                var scheduleLogic = new ScheduleLogic();
+                if (scheduleLogic.deleteFlight(id)) {
+                    Session["ErrorDeleting"] = false;
+                    return RedirectToAction("SeeFlights", new { routeId = (int)Session["RouteId"] });
+                } 
+                else
+                {
+                    Session["ErrorDeleting"] = true;
+                    return RedirectToAction("SeeFlights", new { routeId = (int)Session["RouteId"] });
+                }
+            }
+        }
     }
+
 }
 
