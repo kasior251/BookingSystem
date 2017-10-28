@@ -54,7 +54,7 @@ namespace BookingSystem.DAL
     {
         public DatabaseContext() : base("name=DB")
         {
-            //Database.CreateIfNotExists();
+            Database.CreateIfNotExists();
         }
 
         public DbSet<Admins> Admins { get; set; }

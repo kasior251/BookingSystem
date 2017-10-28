@@ -72,8 +72,14 @@
                     dataType: 'json',
                     data: { firstNames: fnames, lastNames: lnames },
                     //dersom alt gikk bra - redirect til siden med bekreftelse
-                    success: function () {
-                        window.location = '/Home/ShowConfirmation';
+                    success: function (status) {
+                        if (status == "OK") {
+                            window.location = '/Home/ShowConfirmation';
+                        }
+                        else 
+                        {
+                            window.location = '/Home/Error';
+                        }
                     },
                     //vis error siden dersom controlleren returnerte feil
                     error: function () {

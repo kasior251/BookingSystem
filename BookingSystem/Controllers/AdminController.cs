@@ -23,9 +23,11 @@ namespace BookingSystem.Controllers
             _scheduleBLL = new ScheduleLogic();
         }
 
-        public AdminController(IAdminLogic stub)
+        public AdminController(IAdminLogic stub, IRouteLogic stubR, IScheduleLogic stubS)
         {
             _adminBLL = stub;
+            _routeBLL = stubR;
+            _scheduleBLL = stubS;
         }
 
         public AdminController(IRouteLogic stub)
@@ -219,24 +221,25 @@ namespace BookingSystem.Controllers
             }
             else
             {
+                //vis bilde for å skape en ny flyvning
                 return View();
             }
         }
+
         public string CreateNewFlight(long departure, long arrival, int seats, int price)
         {
             var status = "";
             if (_scheduleBLL.addNewFlight(departure, arrival, seats, price, (int)Session["RouteId"]))
             {
+                //returnere OK dersom flyvningen ble registrert i db
                 status = "OK";
             } else
             {
+                //returnere "ERROR" ellers
                 status = "ERROR";
             }
             var jsonSerializer = new JavaScriptSerializer();
             return jsonSerializer.Serialize(status);
-            
-            
-            //return RedirectToAction("SeeFlights", new { routeId = (int)Session["RouteId"] });
 
         }
 
@@ -251,6 +254,7 @@ namespace BookingSystem.Controllers
 
         }
 
+        //få en liste av avgangs- og ankomst datoer for gjeldende avganger
         public string GetDates(int id)
         {
             List<long> dates = new List<long>();
@@ -266,6 +270,7 @@ namespace BookingSystem.Controllers
 
         public ActionResult DeleteFlight(int id)
         {
+            //sjekk om innlogget, hvis ikke send til innlogingsside
             checkStatus();
             if (!(bool)Session["Authorized"])
             {

@@ -8,7 +8,6 @@ namespace BookingSystem.Model
 {
     public class Ticket
     {
-        [Key]
         public string id { get; set; }
 
         public List<Passenger> passengers { get; set; }

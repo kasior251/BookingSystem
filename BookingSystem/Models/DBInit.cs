@@ -112,7 +112,6 @@ namespace BookingSystem.Models
             routes.ForEach(r => context.Routes.Add(r));
             //legg alle schedules inn i databasen
             schedules.ForEach(s => context.Schedules.Add(s));
-
             base.Seed(context);
         }
 

@@ -19,6 +19,18 @@ namespace BookingSystem.DAL
             }
         }
 
+        public bool adminExists(Admin admin)
+        {
+            if (admin.username == "")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public bool addNew(Route route)
         {
             if (route.id == 0)
@@ -34,18 +46,6 @@ namespace BookingSystem.DAL
         public bool addNewFlight(long departure, long arrival, int seats, int price, int routeId)
         {
             if (departure == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        public bool adminExists(Admin admin)
-        {
-            if (admin.username == "")
             {
                 return false;
             }
@@ -99,9 +99,9 @@ namespace BookingSystem.DAL
             var flights = new List<Schedule>();
             Schedule s = new Schedule()
             {
-                id = 1,
-                departureDate = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
-                arrivalDate = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
+                id = routeId,
+                departureDate = 100,
+                arrivalDate = 10,
                 seatsLeft = 0,
                 price = 0,
                 route = new Route()

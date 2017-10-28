@@ -1,6 +1,7 @@
 ﻿using BookingSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace BookingSystem.DAL
                 db.SaveChanges();
                 return true;
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
@@ -106,6 +107,7 @@ namespace BookingSystem.DAL
                 return true;
             } catch (Exception e)
             {
+                System.IO.File.WriteAllText(@"C: \Users\Kasia\source\repos\BookingSystem\BookingSystem\App_Data\errors.txt", e.ToString());
                 return false;
             }
         }

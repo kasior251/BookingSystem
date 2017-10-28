@@ -1,6 +1,7 @@
 ﻿using BookingSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -15,9 +16,18 @@ namespace BookingSystem.Models
             //Database.SetInitializer(new DBInit());
         }
 
+        public DbSet<Admins> Admins { get; set; }
         public DbSet<Route> Routes { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
         public virtual DbSet<Passenger> Passengers { get; set; }
+    }
+
+        public class Admins
+    {
+        [Key]
+        public string username { get; set; }
+        [Required(ErrorMessage = "Password  can't be empty")]
+        public byte[] password { get; set; }
     }
 }

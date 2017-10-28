@@ -111,6 +111,7 @@ namespace BookingSystem.Controllers
         //book billetten(e) i systemet
         public string Summary(string[] firstNames, string[] lastNames)
         {
+
             var nr = firstNames.Length;
             List<Passenger> passengers = new List<Passenger>();
             for (int i = 0; i < nr; i++)
@@ -127,32 +128,36 @@ namespace BookingSystem.Controllers
 
             Ticket ticket = new Ticket();
             //List<Schedule> schedules = new List<Schedule>();
-            ticket.schedule = db.Schedules.Find(flightId);
             //schedules.Add(db.Schedules.Find(flightId));
             Session["Ticket"] = ticket;
             db.Tickets.Add(ticket);
             ticket.passengers = passengers;
+            ticket.schedule = db.Schedules.Find(flightId);
             ticket.id = ConfirmNr();
-            if (returnId != 0)
-            {
-                Ticket t = new Ticket()
-                {
-                    id = ticket.id + "R",
-                    schedule = db.Schedules.Find(returnId),
-                    passengers = passengers
-                };
-                //schedules.Add(db.Schedules.Find(returnId));
-                db.Tickets.Add(t);
-            }
-            //ticket.schedule = schedule;
 
             var schedule = (from s in db.Schedules
-                         where  s.id == flightId
-                         select s).FirstOrDefault();
+                            where s.id == flightId
+                            select s).FirstOrDefault();
 
 
             //oppdater antall tilgj. seter
             schedule.seatsLeft -= nr;
+
+            if (returnId != 0)
+            {
+                Ticket t = new Ticket();
+                db.Tickets.Add(t);
+                t.passengers = passengers;
+                t.schedule = db.Schedules.Find(returnId);
+                t.id = ticket.id + "R";
+
+                var scheduleR = (from s in db.Schedules
+                                where s.id == returnId
+                                select s).FirstOrDefault();
+
+                scheduleR.seatsLeft -= nr;
+
+            }
             string retString = "";
 
             if (returnId != 0)
